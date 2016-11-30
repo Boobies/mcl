@@ -53,6 +53,7 @@
             <title>Components</title>
 
             <itemizedlist>
+                <listitem><para><citerefentry><refentrytitle>classes</refentrytitle><manvolnum>3</manvolnum></citerefentry></para></listitem>
                 <listitem><para><citerefentry><refentrytitle>exceptions</refentrytitle><manvolnum>3</manvolnum></citerefentry></para></listitem>
             </itemizedlist>
 
@@ -71,6 +72,7 @@
 
     </refentry>
 
+    <xi:include href="classes.xml"/>
     <xi:include href="exceptions.xml"/>
 
 </reference>

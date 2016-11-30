@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with the Modern C Library.  If not, see <http://www.gnu.org/licenses/>.
 
-MCL_SRC_FILES := exceptions.c
+MCL_SRC_FILES := classes.c exceptions.c
 MCL_OBJ_FILES := $(MCL_SRC_FILES:.c=.o)
 MCL_LIB_FILE := libmcl.a
 

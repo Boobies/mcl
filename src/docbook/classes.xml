@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<refentry xmlns="http://docbook.org/ns/docbook" xml:id="classes">
+
+    <info>
+        <productname>The Modern C Library</productname>
+        <author>
+            <personname>
+                <firstname>Bogdan</firstname>
+                <surname>Barbu</surname>
+            </personname>
+            <contrib>Wrote this document.</contrib>
+        </author>
+        <copyright>
+            <year>2016</year>
+            <holder>Bogdan Barbu</holder>
+        </copyright>
+        <legalnotice>
+            Copying distribution and of this file, with or without modification,
+            are permitted in any medium without royalty provided the copyright
+            notice and this notice are preserved.  This file is offered as-is,
+            without any warranty.
+        </legalnotice>
+    </info>
+
+    <refmeta>
+        <refentrytitle>Classes</refentrytitle>
+        <manvolnum>3</manvolnum>
+    </refmeta>
+
+    <refnamediv>
+        <refname>classes</refname>
+        <refpurpose>Desription of MCL's class facilities</refpurpose>
+    </refnamediv>
+
+    <refsynopsisdiv>
+        <programlisting language="C">#include &lt;classes.h&gt;</programlisting>
+    </refsynopsisdiv>
+
+    <refsect1>
+
+        <title>Description</title>
+
+        <para>
+            Each class should have an associated descriptor which contains that class' size, and pointers to its constructor and destructor. This descriptor is
+            useful to the <function>new</function> and <function>delete</function> functions, which construct and destruct class objects, respectively. 
+        </para>
+
+        <para>
+            If <function>new</function> fails to allocate memory for a class, it will throw the <exceptionname>bad_alloc</exceptionname> exception.
+        </para>
+
+    </refsect1>
+
+    <refsect1>
+
+        <title>Functions</title>
+
+        <funcsynopsis language="C">
+            <funcsynopsisinfo>Constructs a class object.</funcsynopsisinfo>
+            <funcprototype>
+                <funcdef><type>void *</type> <function>new</function></funcdef>
+                <paramdef><type>const class *</type> <parameter>desc</parameter></paramdef>
+                <varargs/>
+            </funcprototype>
+        </funcsynopsis>
+
+        <funcsynopsis language="C">
+            <funcsynopsisinfo>Destroys a class object.</funcsynopsisinfo>
+            <funcprototype>
+                <funcdef><type>void</type> <function>delete</function></funcdef>
+                <paramdef><type>void *</type> <parameter>object</parameter></paramdef>
+            </funcprototype>
+        </funcsynopsis>
+
+    </refsect1>
+
+    <refsect1>
+
+        <title>Examples</title>
+
+        <example>
+            <title>Defining a class descriptor, creating a class, and destroying it.</title>
+            <programlisting language="C">
+<![CDATA[
+struct myclass {
+    class desc;
+    int *value;
+};
+
+void myclass_ctor(void *const self, const va_list args) {
+
+    ((struct myclass *)self)->value = malloc(sizeof *((struct myclass *)self)->value);
+    *((struct myclass *)self)->value = va_arg(args, int);
+}
+
+void myclass_dtor(void *const self) {
+
+    free(((struct myclass *)self)->value);
+}
+
+void myclass_print(struct myclass *const object) {
+    printf("%d", *object->value);
+}
+
+void test(void) {
+    const class myclass_desc = { sizeof (struct myclass), NULL, myclass_ctor, myclass_dtor };
+
+    try {
+        struct myclass *myobj = new(&myclass_desc, 42);
+        myclass_print(myobj);
+        delete(myobj);
+    } catch (bad_alloc) {
+        fprintf(stderr, "%s", myobj_errmsg[bad_alloc]);
+    }
+}]]>
+            </programlisting>
+        </example>
+
+    </refsect1>
+
+    <refsect1>
+
+        <title>Caveats</title>
+
+        <para>
+            <itemizedlist>
+                <listitem>
+                    <para>
+                        The class' descriptor <emphasis>must</emphasis> be declared to be the <type>struct</type>'s first member.
+                    </para>
+                </listitem>
+            </itemizedlist>
+        </para>
+
+    </refsect1>
+
+</refentry>
+

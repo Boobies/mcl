@@ -9,6 +9,7 @@ Features
 
 The following is an exhaustive list of the library's features:
 
+* Classes
 * Exception handling
 
 Source Code
