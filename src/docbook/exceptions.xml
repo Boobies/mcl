@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<refentry xmlns="http://docbook.org/ns/docbook" xml:id="exceptions">
+
+    <info>
+        <productname>The Modern C Library</productname>
+        <author>
+            <personname>
+                <firstname>Bogdan</firstname>
+                <surname>Barbu</surname>
+            </personname>
+            <contrib>Wrote this document.</contrib>
+        </author>
+        <copyright>
+            <year>2016</year>
+            <holder>Bogdan Barbu</holder>
+        </copyright>
+        <legalnotice>
+            Copying distribution and of this file, with or without modification,
+            are permitted in any medium without royalty provided the copyright
+            notice and this notice are preserved.  This file is offered as-is,
+            without any warranty.
+        </legalnotice>
+    </info>
+
+    <refmeta>
+        <refentrytitle>Exception Handling</refentrytitle>
+        <manvolnum>3</manvolnum>
+    </refmeta>
+
+    <refnamediv>
+        <refname>exceptions</refname>
+        <refpurpose>Desription of MCL's exception handling facilities</refpurpose>
+    </refnamediv>
+
+    <refsynopsisdiv>
+        <programlisting language="C">#include &lt;exceptions.h&gt;</programlisting>
+    </refsynopsisdiv>
+
+    <refsect1>
+
+        <title>Description</title>
+
+        <para>
+            In order to assist with disciplined error handling, the library extends the C language with a set of macros that offer support for exception handling
+            even to strictly conforming programs. The exceptions must be thrown from within <command>try</command> blocks<footnote><para>This may also happen
+            indirectly: from a function called inside of a <command>try</command> block and/or a nested <command>catch</command> or <command>finally</command>
+            block.</para></footnote> and caught by their handlers, as defined by <command>catch</command> blocks. If an appropriate handler is not found in the
+            scope of the <command>try</command> clause that threw it, the exception stack is unwound and the exception rethrown. Also, if present, a
+            <command>finally</command> block will executed before <command>try</command> goes out of scope.
+        </para>
+
+        <para>
+            Both <command>catch</command> and <command>finally</command> clauses are optional. There can be multiple <command>catch</command> clauses associated
+            with a <command>try</command> clause, but a maximum of one <command>finally</command> clause.
+        </para>
+
+        <para>
+            Exceptions are of type <type>int</type>.
+        </para>
+
+    </refsect1>
+
+    <refsect1>
+
+        <title>Examples</title>
+
+        <example>
+            <title>Some code attempts to perform a task and then cleans up.</title>
+            <programlisting language="C">
+<![CDATA[try {
+    if ((buffer = malloc(sizeof *buffer)) == NULL)
+        throw(ERR_ALLOC);
+    // Some processing takes place here.
+} catch (ERR_ALLOC) {
+    fprintf(stderr, "%s\n", errormsg[ERR_ALLOC]);
+} finally {
+    free(buffer);
+}]]>
+            </programlisting>
+        </example>
+
+        <example>
+            <title>A function throws an exception to be caught by its caller.</title>
+            <programlisting language="C">
+<![CDATA[#define EXCEPTION 42
+
+noreturn void foo(void) {
+
+    throw(EXCEPTION);
+}
+
+void bar(void) {
+
+    try {
+        foo();
+    } catch (EXCEPTION) {
+        puts("Caught.");
+    }
+}
+]]>
+            </programlisting>
+        </example>
+    </refsect1>
+
+    <refsect1>
+
+        <title>Caveats</title>
+
+        <para>
+            <itemizedlist>
+                <listitem>
+                    <para>
+                        A hosted ISO/IEC 9899:1999 (or newer) implementation is <emphasis>required</emphasis>.
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>
+                        User-defined exceptions must be <emphasis>strictly positive</emphasis>. All other values are reserved.
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>
+                        Changing the flow of execution using control transfer mechanisms (such as <command>return</command>, <command>goto</command>, or
+                        <function>longjmp</function>) from the outside of an exception block to inside of it, or vice versa, can <emphasis>interfere</emphasis>
+                        with the exception handling mechanism.
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>
+                        If an exception is thrown from a <command>finally</command> block following a missed handler, the current exception will be
+                        <emphasis>discarded</emphasis>.
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>
+                        Thread safety is <emphasis>only</emphasis> guaranteed when using an ISO/IEC:9899:2011 (or newer) implementation supporting threads.
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>
+                        The <command>try</command>, <command>catch</command>, and <command>finally</command> clauses and the <command>throw</command> statement
+                        are implemented as macros. Thus, undefining the macros will make them <emphasis>unavailable</emphasis> for the rest of the translation unit.
+                    </para>
+                </listitem>
+            </itemizedlist>
+        </para>
+
+    </refsect1>
+
+</refentry>
+

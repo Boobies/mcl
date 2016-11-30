@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<reference xmlns="http://docbook.org/ns/docbook" xmlns:xi="http://www.w3.org/2001/XInclude">
+
+    <title>The Modern C Library Manual</title>
+
+    <refentry xml:id="mcl">
+
+        <info>
+            <productname>The Modern C Library</productname>
+            <author>
+                <personname>
+                    <firstname>Bogdan</firstname>
+                    <surname>Barbu</surname>
+                </personname>
+                <contrib>Wrote this document.</contrib>
+            </author>
+            <copyright>
+                <year>2016</year>
+                <holder>Bogdan Barbu</holder>
+            </copyright>
+            <legalnotice>
+                Copying distribution and of this file, with or without modification,
+                are permitted in any medium without royalty provided the copyright
+                notice and this notice are preserved.  This file is offered as-is,
+                without any warranty.
+            </legalnotice>
+        </info>
+
+        <refmeta>
+            <refentrytitle>Introduction</refentrytitle>
+            <manvolnum>3</manvolnum>
+        </refmeta>
+
+        <refnamediv>
+            <refname>mcl</refname>
+            <refpurpose>Overview of MCL</refpurpose>
+        </refnamediv>
+
+        <refsect1>
+
+            <title>Description</title>
+
+            <para>
+                Oftentimes, it is impractical to reimplement large software projects using more appropriate programming languages. It is the goal of
+                <productname>the Modern C Library</productname> to provide C programmers with support for modern practices in such situations.
+            </para>
+
+        </refsect1>
+
+        <refsect1>
+
+            <title>Components</title>
+
+            <itemizedlist>
+                <listitem><para><citerefentry><refentrytitle>exceptions</refentrytitle><manvolnum>3</manvolnum></citerefentry></para></listitem>
+            </itemizedlist>
+
+        </refsect1>
+
+        <refsect1>
+
+            <title>Linkage</title>
+
+            <example>
+                <title>Linking MCL with a small project.</title>
+                <para><command>c99</command> <filename>foo.c</filename> <option>-l mcl</option></para>
+            </example>
+
+        </refsect1>
+
+    </refentry>
+
+    <xi:include href="exceptions.xml"/>
+
+</reference>
+
