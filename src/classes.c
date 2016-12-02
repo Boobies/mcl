@@ -28,11 +28,16 @@ void *new(const class *const descriptor, ...) {
     if (object == NULL)
         throw(bad_alloc);
 
-    *(class *)object = *descriptor;
-    ((class *)object)->this = object;
-    va_start(args, descriptor);
-    ((class *)object)->ctor(((class *)object)->this, args);
-    va_end(args);
+    try {
+        *(class *)object = *descriptor;
+        ((class *)object)->this = object;
+        va_start(args, descriptor);
+        ((class *)object)->ctor(((class *)object)->this, args);
+    } mcl_catchany {
+        free(object);
+    } finally {
+        va_end(args);
+    }
 
     return object;
 }

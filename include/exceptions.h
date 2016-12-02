@@ -106,6 +106,9 @@ static inline noreturn void mcl_throw(struct mcl_exceptionframe **const exceptio
 #define catch(e)                                                                                                                                    \
         else if (mcl_exceptionstack->state == MCL_CATCH && mcl_exceptionstack->exception == (e) && !(mcl_exceptionstack->mustcatch = false))
 
+#define mcl_catchany                                                                                                                                \
+        else if (mcl_exceptionstack->state == MCL_CATCH)
+
 #define finally                                                                                                                                     \
         else if (mcl_exceptionstack->state == MCL_FINALLY)
 
