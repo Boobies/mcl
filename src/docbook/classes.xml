@@ -43,7 +43,8 @@
 
         <para>
             Each class should have an associated descriptor which contains that class' size, and pointers to its constructor and destructor. This descriptor is
-            useful to the <function>new</function> and <function>delete</function> functions, which construct and destruct class objects, respectively. 
+            useful to the <function>new</function> and <function>delete</function> functions, which construct and destruct class objects, respectively. If a
+            class doesn't have a constructor or destructor, the value <constant>NULL</constant> should be used in the descriptor.
         </para>
 
         <para>

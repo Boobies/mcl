@@ -32,7 +32,8 @@ void *new(const class *const descriptor, ...) {
         *(class *)object = *descriptor;
         ((class *)object)->this = object;
         va_start(args, descriptor);
-        ((class *)object)->ctor(((class *)object)->this, args);
+        if (((class *)object)->ctor != NULL)
+            ((class *)object)->ctor(((class *)object)->this, args);
     } mcl_catchany {
         free(object);
     } finally {
@@ -44,7 +45,8 @@ void *new(const class *const descriptor, ...) {
 
 void delete(void *const object) {
 
-    ((class *)object)->dtor(((class *)object)->this);
+    if (((class *)object)->dtor != NULL)
+        ((class *)object)->dtor(((class *)object)->this);
     free(object);
 }
 
